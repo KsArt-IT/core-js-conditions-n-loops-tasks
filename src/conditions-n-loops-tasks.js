@@ -499,8 +499,45 @@ function shuffleChar(str, iterations) {
  * 321321   => 322113
  *
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  const reversed = [];
+  let rest = number;
+  while (rest > 0) {
+    reversed[reversed.length] = rest % 10;
+    rest = (rest - (rest % 10)) / 10;
+  }
+
+  const n = reversed.length;
+  const digits = [];
+  for (let i = 0; i < n; i += 1) {
+    digits[i] = reversed[n - 1 - i];
+  }
+
+  let pivot = n - 2;
+  while (pivot >= 0 && digits[pivot] >= digits[pivot + 1]) {
+    pivot -= 1;
+  }
+  if (pivot < 0) return number;
+
+  let swap = n - 1;
+  while (digits[swap] <= digits[pivot]) {
+    swap -= 1;
+  }
+  let temp = digits[pivot];
+  digits[pivot] = digits[swap];
+  digits[swap] = temp;
+
+  for (let l = pivot + 1, r = n - 1; l < r; l += 1, r -= 1) {
+    temp = digits[l];
+    digits[l] = digits[r];
+    digits[r] = temp;
+  }
+
+  let result = 0;
+  for (let i = 0; i < n; i += 1) {
+    result = result * 10 + digits[i];
+  }
+  return result;
 }
 
 module.exports = {
